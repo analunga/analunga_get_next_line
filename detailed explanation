@@ -1,0 +1,31 @@
+This general goal of this project is to read lines from a file until their ends are reached. My function handles cases where lines span multiple read operations. 
+
+  BREAKDOWN
+GET_NEXT_LINE
+First, let me explain the use of each function line in the get next line function.
+
+# include "get_next_line_h"; This line is used for inclusion of the header file containing prototypes and all the useful macros/constants used in this project
+
+char  *get_next_line(int fd); This line defines the get_next_line function, which in this case reads a line from a file descriptor (d) and returns it, i.e. that very line
+What's a file descriptor (fd)?; In the context of the get_next_line function, a file descriptor (fd), an integer value that the operating system assigns to open files. 
+It's used to uniquely identify an open file within a process.
+
+static char *remainder; This the a declaration of the of a static variable 'remainder' which in this project is used to store the remaining data from the previous reads. Its persistent between function calls.
+char *line; This is a declaration of the variable 'line' which is used to store the extracted line.
+
+if (fd < 0 || BUFFER_SIZE <= 0) return (NULL);: This section checks if the file descriptor is valid (fd >= 0) and if the buffer size (BUFFER_SIZE) is greater than 0. 
+If either condition is false, it returns NULL, indicating an error.
+
+remainder = ft_conjoin(fd, remainder);: Reads from the file descriptor fd and appends the read data to the existing remainder using the ft_conjoin function. 
+This function handles reading from the file and joining the data with any previously read but not yet processed data. 
+
+line = ft_line_extractor(remainder);: Extracts a line from the joined string remainder using the ft_line_extractor function. 
+It returns a string containing the line, including the newline character if present.
+
+remainder = ft_store(remainder);: Stores the remaining data after the extracted line back into remainder using the ft_store function. 
+This ensures that any data not processed in the current call is retained for the next call.
+
+return (line);: Returns the extracted line. 
+If the end of the file is reached, it returns NULL, indicating that there are no more lines to read.
+
+FT_CONJOIN
